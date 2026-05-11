@@ -5,132 +5,143 @@ using namespace std;
 // --- Transport ---
 
 Transport::Transport() {
-    brand = "Невідоме";
+    brand = "Невідома марка";
     speed = 0;
-    cout << "Конструктор Transport" << "\n";
+    cout << "Конструктор Transport\n";
 }
 
 Transport::Transport(string b, int s) {
     brand = b;
     speed = s;
-    cout << "Конструктор Transport" << "\n";
+    cout << "Конструктор Transport\n";
 }
 
 Transport::~Transport() {
-    cout << "Деструктор Transport" << "\n";
+    cout << "Деструктор Transport\n";
 }
 
-int Transport::SetBrand(string b) {
-    brand = b;
+int Transport::SetBrand(string b) { brand = b; return 1; }
+int Transport::SetSpeed(int s) { speed = s; return 1; }
+int Transport::SetSpeed(int minSpeed, int maxSpeed) {
+    speed = (minSpeed + maxSpeed) / 2;
     return 1;
 }
 
-int Transport::SetSpeed(int s) {
-    speed = s;
-    return 1;
+void Transport::ShowInfo() const {
+    cout << "Транспорт марки " << brand << ", швидкість " << speed << " км/год.\n";
 }
 
-void Transport::ShowTransport() const {
-    cout << "Марка: " << brand << ", швидкість " << speed << " км/год." << "\n";
+void Transport::Move() const {
+    cout << "Транспорт рухається.\n";
 }
 
-// --- LandTransport ---
+// --- Car ---
 
-LandTransport::LandTransport() {
-    wheels = 0;
-    cout << "Конструктор LandTransport" << "\n";
+Car::Car(string b, int s) : Transport(b, s) {}
+
+void Car::ShowInfo() const {
+    cout << "Автомобіль марки " << brand << ", швидкість " << speed << " км/год.\n";
 }
 
-LandTransport::LandTransport(int w) {
-    wheels = w;
-    cout << "Конструктор LandTransport" << "\n";
+void Car::Move() const {
+    cout << "Автомобіль іде по дорозі.\n";
 }
 
-LandTransport::~LandTransport() {
-    cout << "Деструктор LandTransport" << "\n";
-}
+// --- Bus ---
 
-int LandTransport::SetWheels(int w) {
-    wheels = w;
-    return 1;
-}
-
-void LandTransport::ShowLandTransport() const {
-    cout << "Кількість коліс: " << wheels << "\n";
-}
-
-// --- PassengerTransport ---
-
-PassengerTransport::PassengerTransport() {
+Bus::Bus() : Transport() {
     passengers = 0;
-    cout << "Конструктор PassengerTransport" << "\n";
+    cout << "Конструктор Bus\n";
 }
 
-PassengerTransport::PassengerTransport(int p) {
+Bus::Bus(string b, int s, int p) : Transport(b, s) {
     passengers = p;
-    cout << "Конструктор PassengerTransport" << "\n";
+    cout << "Конструктор Bus\n";
 }
 
-PassengerTransport::~PassengerTransport() {
-    cout << "Деструктор PassengerTransport" << "\n";
+Bus::~Bus() {
+    cout << "Деструктор Bus\n";
 }
 
-int PassengerTransport::SetPassengers(int p) {
-    passengers = p;
-    return 1;
+int Bus::SetPassengers(int p) { passengers = p; return 1; }
+
+void Bus::ShowInfo() const {
+    cout << "Автобус марки " << brand << ", швидкість " << speed
+         << " км/год, пасажирів " << passengers << ".\n";
 }
 
-void PassengerTransport::ShowPassengerTransport() const {
-    cout << "Місць для пасажирів: " << passengers << "\n";
+void Bus::Move() const {
+    cout << "Автобус зупиняється на зупинках.\n";
 }
 
-// --- CargoTransport ---
+// --- Truck ---
 
-CargoTransport::CargoTransport() {
+Truck::Truck() : Transport() {
     loadCapacity = 0;
-    cout << "Конструктор CargoTransport" << "\n";
+    cout << "Конструктор Truck\n";
 }
 
-CargoTransport::CargoTransport(int load) {
+Truck::Truck(string b, int s, int load) : Transport(b, s) {
     loadCapacity = load;
-    cout << "Конструктор CargoTransport" << "\n";
+    cout << "Конструктор Truck\n";
 }
 
-CargoTransport::~CargoTransport() {
-    cout << "Деструктор CargoTransport" << "\n";
+Truck::~Truck() {
+    cout << "Деструктор Truck\n";
 }
 
-int CargoTransport::SetLoadCapacity(int load) {
+int Truck::SetLoadCapacity(int load) { loadCapacity = load; return 1; }
+
+void Truck::ShowInfo() const {
+    cout << "Вантажівка марки " << brand << ", швидкість " << speed
+         << " км/год, вантажність " << loadCapacity << " тонн.\n";
+}
+
+void Truck::Move() const {
+    cout << "Вантажівка перевозить вантаж.\n";
+}
+
+// --- ElectricCar ---
+
+ElectricCar::ElectricCar(string b, int batteryPower) : Transport(b, 0) {
+    battery = batteryPower;
+}
+
+int ElectricCar::SetBattery(int batteryPower) { battery = batteryPower; return 1; }
+
+void ElectricCar::ShowInfo() const {
+    cout << "Електромобіль марки " << brand << ", батарея " << battery
+         << " кВт*год, швидкість " << speed << " км/год.\n";
+}
+
+void ElectricCar::Move() const {
+    cout << "Електромобіль іде майже безшумно.\n";
+}
+
+// --- BusTruck ---
+// При virtual наслідуванні конструктор Transport викликається тут, один раз
+
+BusTruck::BusTruck(string b, int s, int p, int load, string purp)
+    : Transport(b, s), Bus(), Truck() {
+    passengers = p;
     loadCapacity = load;
-    return 1;
-}
-
-void CargoTransport::ShowCargoTransport() const {
-    cout << "Вантажність: " << loadCapacity << " тонн" << "\n";
-}
-
-// --- UniversalTransport ---
-
-UniversalTransport::UniversalTransport(string b, int s, int w, int p, int load, string purp)
-    : Transport(b, s), LandTransport(w), PassengerTransport(p), CargoTransport(load) {
     purpose = purp;
-    cout << "Конструктор UniversalTransport" << "\n";
+    cout << "Конструктор BusTruck\n";
 }
 
-UniversalTransport::~UniversalTransport() {
-    cout << "Деструктор UniversalTransport" << "\n";
+BusTruck::~BusTruck() {
+    cout << "Деструктор BusTruck\n";
 }
 
-int UniversalTransport::SetPurpose(string purp) {
-    purpose = purp;
-    return 1;
+int BusTruck::SetPurpose(string purp) { purpose = purp; return 1; }
+
+void BusTruck::ShowInfo() const {
+    cout << "Автобус-вантажівка марки " << brand << ", швидкість " << speed
+         << " км/год, пасажирів " << passengers
+         << ", вантажність " << loadCapacity << " тонн"
+         << ", призначення: " << purpose << ".\n";
 }
 
-void UniversalTransport::ShowInfo() const {
-    cout << "Універсальний транспорт" << "\n";
-    ShowTransport();
-    ShowLandTransport();
-    ShowPassengerTransport();
-    ShowCargoTransport();
-    cout << "Призначення: " << purpose << "\n";
+void BusTruck::Move() const {
+    cout << "Автобус-вантажівка перевозить і людей, і вантаж.\n";
 }

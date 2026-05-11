@@ -11,8 +11,8 @@ public:
     Dyhotomia_class(double a, double b, double eps);
     ~Dyhotomia_class();
 
-    void setAB(double a, double b);
-    void setEps(double eps);
+    void setVolumes(double vol_a, double vol_b);
+    void setTolerance(double vol_eps);
 
     double f(double x);
     int countDyhotomia(double &x);

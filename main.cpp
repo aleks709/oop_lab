@@ -2,45 +2,41 @@
 #include <iostream>
 using namespace std;
 
-
 int main() {
-    cout << "Лабораторна 5. Множинне успадкування" << "\n";
-    cout << "Створення об'єкта:" << "\n";
+    cout << "=== Лабораторна 5. Множинне успадкування ===\n\n";
 
-    UniversalTransport machine("Mercedes", 90, 6, 12, 8, "Туристичні роботи");
+    //  Звичайні класи з лаб. 4 
+    Car car("Toyota", 120);
+    Bus bus("Bogdan", 70, 40);
+    Truck truck("MAN", 80, 12);
+    ElectricCar electricCar("Tesla", 85);
+    electricCar.SetSpeed(90, 110);
 
-    cout << "\nІнформація про об'єкт:" << "\n";
-    machine.ShowInfo();
+    cout << "\n--- Поліморфізм (лаб. 4) ---\n";
+    Transport *transport;
 
-    cout << "\nПеревірка virtual успадкування:" << "\n";
+    transport = &car;         transport->ShowInfo(); transport->Move(); cout << "\n";
+    transport = &bus;         transport->ShowInfo(); transport->Move(); cout << "\n";
+    transport = &truck;       transport->ShowInfo(); transport->Move(); cout << "\n";
+    transport = &electricCar; transport->ShowInfo(); transport->Move(); cout << "\n";
 
-    Transport *baseFromLand      = &machine;
-    Transport *baseFromPassenger = &machine;
-    Transport *baseFromCargo     = &machine;
+    //  Ромбоподібне наслідування (лаб. 5) 
+    cout << "--- Ромбоподібне наслідування ---\n";
+    cout << "Створення BusTruck:\n";
 
-    cout << "Адреса Transport через LandTransport: "      << baseFromLand      << "\n";
-    cout << "Адреса Transport через PassengerTransport: " << baseFromPassenger << "\n";
-    cout << "Адреса Transport через CargoTransport: "     << baseFromCargo     << "\n";
-    cout << "Всі адреси однакові, бо базовий клас Transport створився один раз." << "\n";
+    BusTruck bt("Mercedes", 90, 20, 5, "Туристичні перевезення");
 
-    cout << "\nЗміна даних через різні гілки успадкування:" << "\n";
-    LandTransport      *landPart      = &machine;
-    PassengerTransport *passengerPart = &machine;
-    CargoTransport     *cargoPart     = &machine;
+    cout << "\nІнформація:\n";
+    bt.ShowInfo();
+    bt.Move();
 
-    landPart->SetBrand("MAN");
-    passengerPart->SetSpeed(75);
+    cout << "\n--- Перевірка: Transport створився ОДИН раз ---\n";
+    Transport *t1 = static_cast<Bus*>(&bt);
+    Transport *t2 = static_cast<Truck*>(&bt);
+    cout << "Адреса Transport через Bus:   " << t1 << "\n";
+    cout << "Адреса Transport через Truck: " << t2 << "\n";
+    cout << (t1 == t2 ? "Адреси однакові — virtual спрацювало!" : "Адреси різні — помилка!") << "\n";
 
-    cout << "Після зміни через різні гілки (linia успадкування):" << "\n";
-    cargoPart->ShowTransport();
-
-    cout << "\nПояснення:" << "\n";
-    cout << "Клас UniversalTransport успадковується від трьох батьківських класів." << "\n";
-    cout << "Усі вони мають спільний базовий клас Transport." << "\n";
-    cout << "Завдяки virtual успадкуванню клас Transport створюється тільки один раз." << "\n";
-    cout << "Якби virtual не було, виникло б дублювання базового класу Transport." << "\n";
-
-    cout << "\nОб'єкт знищено." << "\n";
-
+    cout << "\nЗнищення об'єктів:\n";
     return 0;
 }

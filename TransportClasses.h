@@ -14,56 +14,70 @@ public:
 
     int SetBrand(string b);
     int SetSpeed(int s);
-    void ShowTransport() const;
+    int SetSpeed(int minSpeed, int maxSpeed);
+
+    virtual void ShowInfo() const;
+    virtual void Move() const;
 };
 
-class LandTransport : virtual public Transport {
-protected:
-    int wheels;
-
+class Car : public Transport {
 public:
-    LandTransport();
-    LandTransport(int w);
-    ~LandTransport();
-
-    int SetWheels(int w);
-    void ShowLandTransport() const;
+    Car(string b, int s);
+    void ShowInfo() const;
+    void Move() const;
 };
 
-class PassengerTransport : virtual public Transport {
+// virtual public Transport  для уникнення diamond problem
+class Bus : virtual public Transport {
 protected:
     int passengers;
 
 public:
-    PassengerTransport();
-    PassengerTransport(int p);
-    ~PassengerTransport();
+    Bus();
+    Bus(string b, int s, int p);
+    virtual ~Bus();
 
     int SetPassengers(int p);
-    void ShowPassengerTransport() const;
+    void ShowInfo() const;
+    void Move() const;
 };
 
-class CargoTransport : virtual public Transport {
+// virtual public Transport  для уникнення diamond problem
+class Truck : virtual public Transport {
 protected:
     int loadCapacity;
 
 public:
-    CargoTransport();
-    CargoTransport(int load);
-    ~CargoTransport();
+    Truck();
+    Truck(string b, int s, int load);
+    virtual ~Truck();
 
     int SetLoadCapacity(int load);
-    void ShowCargoTransport() const;
+    void ShowInfo() const;
+    void Move() const;
 };
 
-class UniversalTransport : public LandTransport, public PassengerTransport, public CargoTransport {
+class ElectricCar : public Transport {
+private:
+    int battery;
+
+public:
+    ElectricCar(string b, int batteryPower);
+    int SetBattery(int batteryPower);
+    void ShowInfo() const;
+    void Move() const;
+};
+
+// Ромбоподібне наслідування: Bus + Truck -> один Transport
+class BusTruck : public Bus, public Truck {
 private:
     string purpose;
 
 public:
-    UniversalTransport(string b, int s, int w, int p, int load, string purp);
-    ~UniversalTransport();
+    BusTruck(string b, int s, int p, int load, string purp);
+    virtual ~BusTruck();
 
     int SetPurpose(string purp);
     void ShowInfo() const;
+    void Move() const;
 };

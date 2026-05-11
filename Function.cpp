@@ -47,6 +47,7 @@ void totalcalculate(const char* path) {
     rounding(&total);
     std::cout << "Сума чеку: " << total.bills << " Гривень " << total.coins << " Копійок" << std::endl;
     stonks(&total);
+    rounding(&total); 
     std::cout << "Сума до оплати з заокругленням: " << total.bills << " Гривень " << total.coins << " Копійок" << std::endl;
     fclose(list);
 }

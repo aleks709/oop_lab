@@ -20,13 +20,14 @@ double Triangle::area() const {
     return heronArea(*this);
 }
 
-bool Triangle::isDegenerate() const {
-    return area() < 1e-9;
-}
-
 // Векторний добуток для перевірки належності
 double crossProduct(Point O, Point A, Point B) {
     return (A.x - O.x) * (B.y - O.y) - (A.y - O.y) * (B.x - O.x);
+}
+
+
+bool Triangle::isDegenerate() const {
+    return fabs(crossProduct(A, B, C)) < 1e-9;
 }
 
 bool Triangle::onBorder(const Point &P) const {
@@ -36,10 +37,8 @@ bool Triangle::onBorder(const Point &P) const {
     return d1 < 1e-9 || d2 < 1e-9 || d3 < 1e-9;
 }
 
-// Метод векторного добутку
 bool Triangle::contains(const Point &P) const {
     if (isDegenerate()) {
-        std::cout << "Трикутник вироджений (площа = 0)!" << std::endl;
         return false;
     }
 

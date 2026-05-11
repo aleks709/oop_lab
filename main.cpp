@@ -2,7 +2,11 @@
 #include "Dyhotomia_class.h"
 
 int main() {
-    Dyhotomia_class *obj = new Dyhotomia_class(0.4, 1.0, 0.0001);
+    Dyhotomia_class *obj = new Dyhotomia_class(0.0, 0.0, 0.0);
+
+    //  Тут задаємо параметри через методи класу
+    obj->setVolumes(0.4, 1.0);
+    obj->setTolerance(0.0001);
 
     double x = 0;
 

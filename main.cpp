@@ -1,27 +1,22 @@
+#include "Header.h"
 #include <iostream>
-#include "Dyhotomia_class.h"
 
 int main() {
-    Dyhotomia_class *obj = new Dyhotomia_class(0.0, 0.0, 0.0);
 
-    //  Тут задаємо параметри через методи класу
-    obj->setVolumes(0.4, 1.0);
-    obj->setTolerance(0.0001);
+    std::cout << "Обчислення кореня рівняння методами дихотомії та Ньютона" << std::endl;
 
-    double x = 0;
+    Dyhotomia *solver = new Dyhotomia(); //обʼєкт
 
-    if (obj->countDyhotomia(x) == 0) {
-        std::cout << "Method Dyhotomia: x = " << x << std::endl;
-    } else {
-        std::cout << "Method Dyhotomia: no root found" << std::endl;
-    }
+    solver->setInterval(0.0, 2.0);
+    solver->setPrecision(0.00001);
+    solver->setInitialGuess(50.0); 
 
-    if (obj->countNewton(x) == 0) {
-        std::cout << "Method Newton:    x = " << x << std::endl;
-    } else {
-        std::cout << "Method Newton: no root found" << std::endl;
-    }
+    double res_dichotomy = solver->runDichotomy();
+    std::cout << "Результат дихотомії: " << res_dichotomy << "\n" << std::endl;
+    double res_newton = solver->runNewton();
+    std::cout << "Результат Ньютона: " << res_newton << std::endl;   
 
-    delete obj;
+    delete solver;
+
     return 0;
 }
